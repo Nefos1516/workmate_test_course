@@ -1,3 +1,5 @@
+import pytest
+
 from loader import load_data
 
 
@@ -26,3 +28,17 @@ def test_load_multiple_files(tmp_path):
     data = load_data([str(file1), str(file2)])
 
     assert len(data) == 2
+
+def test_load_file_not_found(tmp_path):
+    data = load_data(['nonexistent.csv'])
+
+    assert len(data) == 0
+
+def test_load_key_error(tmp_path):
+    file1 = tmp_path / "data1.csv"
+
+    file1.write_text("title,retention_rate\nVideo 1,30\n")
+
+    data = load_data([str(file1)])
+
+    assert len(data) == 0
